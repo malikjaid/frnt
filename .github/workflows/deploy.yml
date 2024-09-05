@@ -23,7 +23,7 @@ jobs:
       run: npm install
 
     - name: Build Angular Application
-      run: npm run build --prod  # Run the production build
+      run: npm run build   # Run the production build
 
     - name: Set up SSH Agent
       uses: webfactory/ssh-agent@v0.5.3
