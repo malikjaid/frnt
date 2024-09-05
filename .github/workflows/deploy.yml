@@ -1,0 +1,42 @@
+name: Build and Deploy Angular to EC2
+
+on:
+  push:
+    branches:
+      - master # Trigger deployment on push to the main branch
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Application to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Use the Node.js version your Angular app requires
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Angular Application
+      run: npm run build --prod  # Run the production build
+
+    - name: Set up SSH Agent
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Copy build files to EC2
+      run: |
+        scp -r -o StrictHostKeyChecking=no ./dist/* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_DEPLOY_PATH }}
+
+    # - name: SSH into EC2 and run deploy script
+    #   run: |
+    #     ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+    #       cd ${{ secrets.EC2_DEPLOY_PATH }}
+    #       ./deploy.sh  # Ensure this script exists on the EC2 server
+    #     EOF
