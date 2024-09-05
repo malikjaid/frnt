@@ -1,0 +1,138 @@
+.loginFormWrapper {
+    background: url(../../../assets/Login_Bg.jpg) no-repeat;
+    background-size: cover;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    @media screen and (max-width:768px) {
+        padding: 20px;
+    }
+
+    .loginForm {
+        background: rgba(255, 255, 255, 0.9);
+        width: 100%;
+        max-width: 480px;
+        border-radius: 50px;
+        padding: 50px;
+        margin-left: 100px;
+
+        @media screen and (max-width:768px) {
+            margin-left: 0;
+            padding: 20px;
+            max-width: unset;
+            border-radius: 20px;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            margin: 0;
+            margin-bottom: 12px;
+
+            @media screen and (max-width:768px) {
+                flex-direction: column;
+                font-weight: 600;
+            }
+
+            .formLogo {
+                margin-left: 4px;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .subText {
+            font-size: 55px;
+            font-weight: 500;
+            margin: 0;
+            margin-bottom: 12px;
+
+            @media screen and (max-width:768px) {
+                font-size: 40px;
+            }
+
+        }
+
+        .control-label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .form-field {
+            width: 100%;
+
+            .mdc-text-field {
+                border-radius: 10px !important;
+            }
+        }
+
+        .loginBtn {
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #442BC6;
+            padding: 24px;
+            box-shadow: 0px 4px 19px 0px #442BC6;
+
+
+        }
+
+        .error-msg {
+            font-size: 16px;
+        }
+    }
+}
+
+mat-form-field.form-field {
+    --mat-form-field-container-height: 40px;
+    --mat-form-field-container-vertical-padding: 8px;
+}
+
+.subText1 {
+    font-size: 35px;
+    font-weight: 500;
+    margin: 0;
+    margin-bottom: 12px;
+
+    @media screen and (max-width:768px) {
+        font-size: 28px;
+    }
+
+}
+
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.otp_input_fields {
+    text-align: center;
+    font-size: 22px;
+}
+
+.Resend_it {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #0d6efd;
+}
+
+.goBack {
+    top: 20px;
+    left: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #673ab7;
+    transition: all ease 0.4s;
+    &:hover {
+        color: #fff;
+        background: #673ab7;
+    }
+}

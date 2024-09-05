@@ -1,0 +1,72 @@
+<div class="addNewCodesWrapper p-3">
+    <div class="container-fluid">
+        <h3 class="d-flex align-items-center justify-content-between">Add New {{data.codeType |uppercase}} Code
+            <button class="btn" [mat-dialog-close]="false" (click)="coseMode(false)"><mat-icon>close</mat-icon></button>
+        </h3>
+
+        <form [formGroup]="addCodeForm">
+            <div class="row">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
+                        <mat-label class="control-label">Patient Id</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="Enter patient Id" type="text" formControlName="patient_id"
+                                [disabled]="patientId ? true :false" />
+                        </mat-form-field>
+                        @if(addCodeForm.get('patient_id')?.hasError('required') &&
+                        addCodeForm.get('patient_id')?.touched){
+                        <mat-error class="error-msg">Please enter patient id</mat-error>
+                        }
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
+                        <mat-label class="control-label">Code</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="Enter code" type="text" formControlName="code" />
+                        </mat-form-field>
+                        @if(addCodeForm.get('code')?.hasError('required') &&
+                        addCodeForm.get('code')?.touched){
+                        <mat-error class="error-msg">Please enter code</mat-error>
+                        }
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12 col-ms-12 col-md-12 col-lg-12 my-2">
+                        <mat-label class="control-label">Citation</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="Enter citation" type="text" formControlName="description" />
+                        </mat-form-field>
+                        @if(addCodeForm.get('description')?.hasError('required') &&
+                        addCodeForm.get('description')?.touched){
+                        <mat-error class="error-msg">Please enter citation</mat-error>
+                        }
+                    </div>
+                    @if(!patientId){ <div class="col-12 col-ms-12 col-md-12 col-lg-12 my-2">
+                        <mat-label class="control-label">Type</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-select formControlName="type" placeholder="Select your template"
+                                [disabled]="patientId ? true:false">
+                                <mat-option value="cpt">CPT</mat-option>
+                                <mat-option value="icd">ICD</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        @if(addCodeForm.get('type')?.hasError('required') &&
+                        addCodeForm.get('type')?.touched){
+                        <mat-error class="error-msg">Please select type</mat-error>
+                        }
+                    </div>
+                    }
+                </div>
+
+                <div class="col-12 my-2">
+                    <mat-label class="control-label">Review</mat-label>
+                    <mat-form-field appearance="outline" class="form-field">
+                        <textarea matInput placeholder="review" type="text" formControlName="notes" rows="1"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+        <button class="btn submit-btn w-100" type="button" (click)="addCode()">Save</button>
+    </div>
+</div>

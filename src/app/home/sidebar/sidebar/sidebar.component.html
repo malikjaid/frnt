@@ -1,0 +1,27 @@
+<div class="sideBarWrapper">
+    @if(authService.loginRole === 'Doctor'){
+        <ul class="navlist">
+            @for (link of doctorLink; track $index) {
+            <li class="navlistItem">
+                <a [routerLink]="link.link"  routerLinkActive='active' class="navLink">{{link.label}}</a>
+            </li>
+            }
+        </ul>
+        }@else if(authService.loginRole === 'Admin'){
+        <ul class="navlist">
+            @for (link of superAdminLink; track $index) {
+            <li class="navlistItem">
+                <a [routerLink]="link.link" routerLinkActive='active' class="navLink">{{link.label}}</a>
+            </li>
+            }
+        </ul>
+        }@else{
+        <ul class="navlist">
+            @for (link of organisationLink; track $index) {
+            <li class="navlistItem">
+                <a [routerLink]="link.link" routerLinkActive='active' class="navLink">{{link.label}}</a>
+            </li>
+            }
+        </ul>
+        }
+</div>

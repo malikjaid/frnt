@@ -1,0 +1,231 @@
+.patientsDetailsWrapper {
+    padding: 24px;
+
+    .patientForm {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        flex-direction: column;
+
+        form {
+            flex: 0 0 50%;
+        }
+    }
+
+    .patientCard {
+        border-bottom: 1px solid #b8b8b8;
+        margin-bottom: 12px;
+    }
+
+    .form-field {
+        width: 100%;
+    }
+
+    .control-label {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: inline-block;
+    }
+
+    .recordAudioWrapper,
+    .uploadFileControl {
+        background-color: #c49aff30;
+        padding: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+
+    }
+
+    .record-label {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .record-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .microphone-btn {
+        height: 50px;
+        border: 1px solid #ddd;
+        width: 50px;
+        margin: 0 4px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:disabled {
+            background-color: #ddd;
+        }
+
+
+        &.animate {
+            &::after {
+                animation: pulse 1s infinite;
+                border: 5px solid #f24f4f33;
+            }
+        }
+
+        &.stopAnimate {
+            &::after {
+                animation: none;
+                border: none;
+            }
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            display: block;
+            background: transparent;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+    }
+
+    .delete-btn {
+        height: 50px;
+        border: 1px solid #ddd;
+        width: 50px;
+        margin: 0 4px;
+        border-radius: 50%;
+
+        &:disabled {
+            background-color: #ddd;
+        }
+    }
+
+    .generate-btn {
+        background-color: #4B49AC;
+        color: #fff;
+        padding: 16px 18px;
+        margin: 12px 0;
+    }
+
+    .uploadFileControl {
+
+        input[type=file] {
+            padding: 0;
+            border: none;
+        }
+    }
+
+    .optimizedtranscriptWrapper {
+        .optimizedtranscriptControl {
+            position: relative;
+        }
+
+        
+    }
+    .suggestionBox,
+    .original-transcript {
+        // height: calc(100% - 30px);
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow-y: auto;
+        height: 400px;
+        padding: 20px;
+        position: relative;
+       
+    }
+
+}
+
+
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1, 1);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+}
+
+.confirmationModal {
+    border-radius: 24px;
+    padding: 24px;
+
+    .ctaWrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        button {
+            flex: 0 0 50%;
+        }
+
+        .btn-edit {
+            border: 1px solid #4B49AC;
+            color: #4B49AC;
+            padding: 16px 18px;
+
+        }
+
+        .btn-generate-summary {
+            background-color: #4B49AC;
+            color: #fff;
+            padding: 16px 18px;
+            margin: 12px 0;
+        }
+
+    }
+}
+
+.summaryControl {
+    border: 1px solid #000;
+    height: 272px;
+    overflow: auto;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+
+
+.original-transcript {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow-y: auto;
+    height: 272px;
+    padding: 20px;
+}
+
+.loaderWrapper{
+    position: relative;
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 8px solid #8a89c9;
+        border-bottom-color: #ffffff;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

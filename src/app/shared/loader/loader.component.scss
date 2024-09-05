@@ -1,0 +1,48 @@
+/* HTML: <div class="loader"></div> */
+
+.loaderWrapper{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 9999;
+  .loader {
+    width: 60px;
+    height: 60px;
+     --c: linear-gradient(#766DF4 0 0);
+     --m: radial-gradient(farthest-side,#766DF4 92%,#0000);
+    background: 
+      var(--m) center               /12px 12px,
+      var(--c) left 50% top    -20px/8px 16px, 
+      var(--c) left 50% bottom -20px/8px 16px, 
+      var(--c) top  50% left   -20px/16px 8px, 
+      var(--c) top  50% right  -20px/16px 8px;
+    background-repeat: no-repeat;
+    animation: 
+      db8-1 1.5s infinite,
+      db8-2 1.5s infinite;
+  }
+  
+  @keyframes db8-1 {
+    30%,
+    70% {background-position: 
+          center,
+          left 50% top    calc(50% - 8px),
+          left 50% bottom calc(50% - 8px),
+          top  50% left   calc(50% - 8px),
+          top  50% right  calc(50% - 8px)}
+  }
+  
+  @keyframes db8-2 {
+    0%,40%   {transform: rotate(0)}
+    60%,100% {transform: rotate(90deg)}
+  }
+  h2{
+    color: #fff;
+    margin-top: 12px;
+  }
+  // @keyframes s2 {to{transform: rotate(1turn)}}
+}

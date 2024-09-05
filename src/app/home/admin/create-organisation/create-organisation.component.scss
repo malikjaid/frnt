@@ -1,0 +1,39 @@
+.organisationWrapper{
+    padding: 24px;
+
+    position: relative;
+
+    .close-btn{
+        position: absolute;
+        background-color: #442BC6;
+        z-index: 99;
+        right: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+    .organisationForm{
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        flex-direction: column;
+        form{
+            flex: 0 0 50%;
+        }
+    }
+    .patientCard{
+        margin-bottom: 12px;
+    }
+    .form-field{
+        width: 100%;
+    }
+    .control-label{
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: inline-block;
+    }
+    
+}

@@ -1,0 +1,29 @@
+.doctorCreateWrapper{
+    padding: 24px;
+    .doctorForm{
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        flex-direction: column;
+        max-width: 500px;
+        margin: 0 auto;
+
+
+        form{
+            flex: 0 0 50%;
+        }
+    }
+    .patientCard{
+        margin-bottom: 12px;
+    }
+    .form-field{
+        width: 100%;
+    }
+    .control-label{
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: inline-block;
+    }
+    
+}

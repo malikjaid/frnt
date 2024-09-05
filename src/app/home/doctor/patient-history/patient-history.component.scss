@@ -1,0 +1,33 @@
+.patientHistoryWrapper {
+    max-width: 1800px;
+    margin: 0 auto;
+    .patientListWrapper {
+        background: #a799f170;
+        height: 100%;
+    }
+
+    .tableWrapper {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        overflow-x: auto;
+    }
+
+    .viewBtn {
+        background: #4B49AC;
+        color: #fff;
+    }
+
+    .noData {
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    .completionTag{
+        padding: 4px;
+        text-align: center;
+        color: #fff;
+        border-radius: 50px;
+    }
+}
+
+

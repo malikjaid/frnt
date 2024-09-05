@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Summary</h2>
+<mat-dialog-content>
+
+  @if (data.summary) {
+    <p [innerText]="data.summary"></p>
+  }@else {
+    <p>no summary</p>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close color="primary">Close</button>
+</mat-dialog-actions>

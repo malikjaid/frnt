@@ -1,0 +1,56 @@
+<div class="chart-list">
+    <div class="chart orgchart">
+        <div class="menu">
+            <span mat-button [matMenuTriggerFor]="orgchartMenu">
+                <mat-icon>arrow_drop_down</mat-icon>
+            </span>
+            <mat-menu #orgchartMenu="matMenu" xPosition="before" class="customize" class="chart-menu">
+                <button mat-menu-item (click)="updateViewofChart('orgchart', 'last_week')">Last week report</button>
+                <button mat-menu-item (click)="updateViewofChart('orgchart', 'last_month')">Last month report</button>
+            </mat-menu>
+        </div>
+        <div>
+            <canvas #OrganisationChart height="300"></canvas>
+        </div>
+    </div>
+    <div class="chart drchart">
+        <div class="menu">
+            <span mat-button [matMenuTriggerFor]="drchartMenu">
+                <mat-icon>arrow_drop_down</mat-icon>
+            </span>
+            <mat-menu #drchartMenu="matMenu" xPosition="before" class="chart-menu">
+                <button mat-menu-item (click)="updateViewofChart('drchart', 'last_week')">Last week report</button>
+                <button mat-menu-item (click)="updateViewofChart('drchart', 'last_month')">Last month report</button>
+            </mat-menu>
+        </div>
+        <div>
+            <canvas #DoctorChart height="300"></canvas>
+        </div>
+    </div>
+    <div class="chart ptchart">
+        <div class="menu">
+            <span mat-button [matMenuTriggerFor]="ptchartMenu">
+                <mat-icon>arrow_drop_down</mat-icon>
+            </span>
+            <mat-menu #ptchartMenu="matMenu" xPosition="before" class="chart-menu">
+                <button mat-menu-item (click)="updateViewofChart('ptchart', 'last_week')">Last week report</button>
+                <button mat-menu-item (click)="updateViewofChart('ptchart', 'last_month')">Last month report</button>
+            </mat-menu>
+        </div>
+        <div>
+            <canvas #PatientChart height="300"></canvas>
+        </div>
+    </div>
+    <div class="chart card-box">
+        @if(statsCount && statsCount.length){
+        @for (item of statsCount; track $index) {
+        <div class="cardColumn">
+            <div class="detailsCard" [style]="{'background-color': cardBackgroundColor[$index]}">
+                <h5>{{item.role}}</h5>
+                <p>{{item.total}}</p>
+            </div>
+        </div>
+        }
+        }
+    </div>
+</div>

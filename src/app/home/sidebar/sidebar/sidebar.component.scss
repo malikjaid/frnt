@@ -1,0 +1,54 @@
+.sideBarWrapper {
+    width:250px;
+    height: 100vh;
+    padding: 16px;
+    background: #F5F7FF;
+
+    .navlist {
+        list-style: none;
+        // display: flex;
+        padding: 0;
+
+
+
+        .navlistItem {
+            margin-bottom: 8px;
+        }
+
+        .navLink {
+            text-decoration: none;
+            padding: 12px;
+            display: inline-block;
+            transition: all 0.3s ease-in;
+            border-radius: 8px;
+            width: 100%;
+            color: #000;
+            &:hover {
+                background: #442BC6;
+                color: #fff;
+            }
+
+            &.active {
+                background: #442BC6;
+                color: #fff;
+        
+            }
+        }
+
+    }
+
+    .mobileBtn {
+        display: none;
+        background: transparent;
+        border: none;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+
+        @media screen and (max-width:768px) {
+            display: block;
+        }
+    }
+
+    
+}

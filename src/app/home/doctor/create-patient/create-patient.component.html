@@ -1,0 +1,444 @@
+<div class="patientsDetailsWrapper">
+    <div class="container">
+        <div class="patientForm">
+            <form [formGroup]="patientDetailsForm">
+                <div class="patientCard">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 my-3">
+                            <div class="form-group">
+                                <mat-label class="control-label">Patient Name</mat-label>
+                                <mat-form-field appearance="outline" class="form-field">
+                                    <input matInput placeholder="Enter patient name" formControlName="patientName" />
+                                </mat-form-field>
+                                @if(patientDetailsForm.get('patientName')?.hasError('required') &&
+                                patientDetailsForm.get('patientName')?.touched){
+                                <mat-error class="error-msg">Please enter patient name</mat-error>
+                                }
+                                @if(patientDetailsForm.get('patientName')?.hasError('numb') &&
+                                patientDetailsForm.get('patientName')?.touched){
+                                <mat-error class="error-msg">Numeric values not allowed.</mat-error>
+                                }
+                                @if(patientDetailsForm.get('patientName')?.hasError('speChar') &&
+                                patientDetailsForm.get('patientName')?.touched){
+                                <mat-error class="error-msg">Special characters not allowed.</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 my-3">
+                            <div class="form-group">
+                                <mat-label class="control-label">Patient Id</mat-label>
+                                <mat-form-field appearance="outline" class="form-field">
+                                    <input matInput placeholder="Enter Patient Id" formControlName="patientId" />
+                                </mat-form-field>
+                                @if(patientDetailsForm.get('patientId')?.hasError('required') &&
+                                patientDetailsForm.get('patientId')?.touched){
+                                <mat-error class="error-msg">Please enter patient ID</mat-error>
+                                }
+                                @if(patientDetailsForm.get('patientId')?.hasError('maxlength') &&
+                                patientDetailsForm.get('patientId')?.touched){
+                                <mat-error class="error-msg">Maximum 100 characters allowed!</mat-error>
+                                }
+                                @if(patientDetailsForm.get('patientId')?.hasError('speCharwithoutDash') &&
+                                patientDetailsForm.get('patientId')?.touched){
+                                <mat-error class="error-msg">Special characters not allowed</mat-error>
+                                }
+                                @if(patientDetailsForm.get('patientId')?.hasError('space') &&
+                                patientDetailsForm.get('patientId')?.touched){
+                                <mat-error class="error-msg">Space not allowed</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3  d-flex align-items-center my-3">
+                            <div class="audioControl">
+                                <p class="record-label ps-3">Patient Type</p>
+                                <mat-radio-group aria-label="Select an option" color="primary"
+                                    formControlName="patientType">
+                                    <mat-radio-button value="1">In Patient</mat-radio-button>
+                                    <mat-radio-button value="2">Out Patient</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3  d-flex align-items-center my-3">
+                            <div class="audioControl">
+                                <p class="record-label ps-3">Audio File</p>
+                                <mat-radio-group aria-label="Select an option" color="primary"
+                                    (change)="enableOptions($event)" formControlName="audioOption">
+                                    @for (item of fileOptions; track $index) {
+                                    <mat-radio-button [value]="item.value">{{item.label}}</mat-radio-button>
+                                    }
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            @if(isUploadFile){
+                            <div class="uploadFileControl my-3">
+                                <mat-label class="control-label">Upload Audio File</mat-label>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="file" formControlName="audioFile" class="uploadFileControl"
+                                        (change)="onFileSelected($event)" #uploadControl
+                                        [attr.disabled]="isGenerateTranscript" />
+
+                                    @if(uploadedFileUrl){
+                                    <audio controls>
+                                        <source [src]="uploadedFileUrl" />
+                                    </audio>
+                                    }
+                                    <button class="btn" (click)="deleteUploadedFile()"
+                                        [ngClass]="isDelete ?  'd-none':'d-block'"><img class="img-fluid"
+                                            src="../../../assets/delete.svg" alt="deleteBtn" width="25"
+                                            height="25" /></button>
+                                </div>
+                            </div>
+                            }@else {
+                            <div class="recordAudioWrapper my-3">
+                                @if(isRecording || isPaused){
+                                <p>{{formatTime(elapsedTime)}}</p>
+
+                                }
+                                @if(audioURL){
+                                <div class="audioPlay">
+                                    <audio controls>
+                                        <source [src]="audioURL">
+                                    </audio>
+                                </div>
+                                }
+                                <div class="record-control">
+                                    <button (click)="isRecording ? stopRecording() : startRecording()"
+                                        class="microphone-btn btn" [ngClass]="isRecording && !isPaused ? 'animate':''"
+                                        [disabled]="isStop" [matTooltip]="isRecording ? 'Stop':'Record'">
+                                        <img class="img-fluid"
+                                            [src]="isRecording ? '../../../assets/stopRecording.svg':'../../../assets/microphone.svg'"
+                                            alt="play" />
+                                    </button>
+                                    <button class="microphone-btn btn"
+                                        (click)="isPaused ? resumeRecording() : pauseRecording()"
+                                        [disabled]="!isRecording" [matTooltip]="isPaused ? 'Resume':'Pause'">
+                                        <img class="img-fluid"
+                                            [src]="isPaused ? '../../../assets/playRecording.svg':'../../../assets/pauseRecording.svg'"
+                                            alt="pause" />
+                                    </button>
+                                    <button (click)="deleteRecording()" [disabled]="!audioURL ? true : null"
+                                        class="delete-btn btn" [ngClass]="isDelete ?  'd-none':'d-block'"
+                                        matTooltip="Delete">
+                                        <img class="img-fluid" src="../../../assets/delete.svg" alt="delete" />
+                                    </button>
+                                </div>
+                            </div>
+                            }
+                            @if(patientDetailsForm.get('audioFile')?.hasError('required') &&
+                            patientDetailsForm.get('patientId')?.touched ){
+                            <mat-error class="error-msg">Audio file is required</mat-error>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row">
+                        <div class="col-12 my-3">
+                            <button class="rounded-btn btn d-flex align-items-center" type="button"
+                                (click)="submitPatientDetails()" [disabled]="isGenerate"><mat-icon
+                                    class="me-3">settings</mat-icon>Generate
+                                Transcript</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="transcriptWrapper">
+                            <div class="row">
+                                <div class="col-6">
+                                    <mat-label class="control-label">Transcript</mat-label>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-end">
+                                    @if(citation && citation.length){
+                                    <a class="btn" type="button" (click)="showCitations()">View
+                                        Citations</a>
+                                    }
+                                    <button class="btn copy-btn p-0 mb-1" (click)="copyToClipBoard('transcript')"
+                                        matTooltip="copy">
+                                        <img src="../../../../assets/copy.svg" alt="copy">
+                                    </button>
+                                </div>
+                            </div>
+                            <div [innerHTML]="transcriptValue" class="original-transcript"
+                                [contentEditable]="isContentEditable"></div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="optimizedtranscriptWrapper h-100">
+                            <div class="row">
+                                <div class="col-6">
+                                    <mat-label class="control-label d-flex align-items-center">Optimized Transcript
+                                        <!-- <mat-icon class="ms-1" style="font-size: 16px;" matTooltip="">info_outline</mat-icon> -->
+                                    </mat-label>
+                                </div>
+                            </div>
+                            <!-- <div class="suggestionBox">
+                                <ul>
+                                    @for (item of factualError; track $index) {
+                                    <li>
+                                        <div class="row align-items-center">
+                                            <div class="col-9">
+                                                <p class="mb-0">Error: {{ item.error }}</p>
+                                                <p class="mb-0">Correction: {{ item.correction }}</p>
+                                            </div>
+                                            <div class="col-3">
+                                                <button class="btn"
+                                                (click)="toggleCorrection($index, 'factualError')" [matTooltip]="factualErrorStates[$index] ? 'undo':'apply changes'">
+                                                    <mat-icon>{{factualErrorStates[$index] ? 'undo':'check'}}</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    }
+                                    @for (item of grammaticalError; track $index) {
+                                    <li class="mt-2">
+                                        <div class="row align-items-center">
+                                            <div class="col-9">
+                                                <p class="mb-0">Error: {{ item.error }}</p>
+                                                <p class="mb-0">Correction: {{ item.correction }}</p>
+                                            </div>
+                                            <div class="col-3">
+                                                <button class="btn"
+                                                (click)="toggleCorrection($index, 'grammaticalError')"  [matTooltip]="grammaticalErrorStates[$index] ? 'undo':'apply changes'">
+                                                    <mat-icon>{{grammaticalErrorStates[$index] ? 'undo':'check'}}</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+                                    </li>
+                                    }
+                                    @for (item of medTermError; track $index) {
+                                    <li class="mt-2">
+                                        <div class="row align-items-center">
+                                            <div class="col-9">
+                                                <p class="mb-0">Error: {{ item.error }}</p>
+                                                <p class="mb-0">Correction: {{ item.correction }}</p>
+                                            </div>
+                                            <div class="col-3">
+                                                <button class="btn"
+                                                (click)="toggleCorrection($index, 'medTermError')"   [matTooltip]="medTermErrorStates[$index] ? 'undo':'apply changes'">
+                                                <mat-icon>{{medTermErrorStates[$index] ? 'undo':'check'}}</mat-icon>
+                                            </button>
+                                            </div>
+                                        </div>
+
+
+                                    </li>
+                                    }
+                                </ul>
+                            </div> -->
+                            <div class="loaderWrapper">
+                                <div class="optimized-transcript suggestionBox" [innerHTML]="optimizedTranscriptValue"
+                                    [contentEditable]="isContentEditable">
+                                </div>
+                                @if(isLoading){
+                                    <div class="loader"></div>
+                                }
+                            </div>
+                            <!-- <mat-form-field appearance="outline" class="form-field optimizedtranscriptControl">
+                                <textarea matInput placeholder="" rows="10" formControlName="optimizedtranscript"
+                                    (keydown)="isEditable = true;" [readonly]="isTranscriptDisable"></textarea>
+                                <div class="loader" [ngClass]="isLoading ? 'd-block':'d-none'"></div>
+                            </mat-form-field> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div
+                        class="col-12 col-sm-12 col-md-4 col-lg-4 d-flex align-items-start flex-column justify-content-center">
+                        <p class="record-label ps-3">Select Transcript</p>
+                        <mat-radio-group aria-label="Select an option" color="primary"
+                            formControlName="chooseTranscript" (change)="selectTranscript($event)">
+                            <mat-radio-button value="1">Transcript</mat-radio-button>
+                            <mat-radio-button value="2">Optimized Transcript</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="audioControl">
+                            <mat-label class="control-label">Template</mat-label>
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-select formControlName="promptId" placeholder="Select your template">
+                                    @if(promptTemplate && promptTemplate.length){
+                                    @for (item of promptTemplate; track $index) {
+                                    <mat-option [value]="item.id">{{item.key}}</mat-option>
+                                    }
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                            @if(patientDetailsForm.get('promptId')?.hasError('required') &&
+                            patientDetailsForm.get('promptId')?.touched){
+                            <mat-error class="error-msg">Prompt is required</mat-error>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-end align-items-end">
+                        <button class="rounded-btn btn m-0 d-flex align-items-center" (click)="generateSummary()"
+                            [disabled]="isGenerateSummary"><mat-icon class="me-3">settings</mat-icon>Generate
+                            Summary</button>
+                    </div>
+
+
+                </div>
+                <div class="summeryWrapper">
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-label class="control-label">Summary</mat-label>
+                        </div>
+                        <div class="col-6 d-flex align-items-center justify-content-end">
+                            <button class="btn copy-btn" matTooltip="copy" (click)="copySummary()">
+                                <img src="../../../../assets/copy.svg" alt="copy">
+                            </button>
+                        </div>
+                    </div>
+                    <mat-form-field appearance="outline" class="form-field">
+                        <textarea matInput placeholder="" rows="10" formControlName="summary" readonly></textarea>
+                    </mat-form-field>
+                    <!-- <div class="summaryControl" #summaryControl></div> -->
+
+
+                    
+                </div>
+                <!-- @if(accessibleFeature && accessibleFeature['Summary'] === 1){
+                } -->
+                <div>
+                    @if(CPTCodes && CPTCodes.length){
+                    <div class="tableWrapper my-3 p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h5>CPT Codes</h5>
+                            <button class="btn rounded-btn d-flex align-items-center my-2"
+                                (click)="addNewCodes('cpt')"><mat-icon>add</mat-icon> Add CPT Codes</button>
+                        </div>
+                        <table mat-table [dataSource]="CPTCodes" matSort>
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="Sr no">
+                                <th mat-header-cell *matHeaderCellDef> Sr no </th>
+                                <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="Code">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="patient_name"> Code </th>
+                                <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="Description">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="patient_id"> Citation </th>
+                                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Action">
+                                <th mat-header-cell *matHeaderCellDef>Action</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-radio-group aria-label="Select an option" color="primary"
+                                        (change)="sendCodeReview(element.id,$event)"
+                                        [value]="element.status ? element.status : null">
+                                        <mat-radio-button value="1">Ok</mat-radio-button>
+                                        <mat-radio-button value="2">Not Ok</mat-radio-button>
+                                        <mat-radio-button value="2">Not Sure</mat-radio-button>
+                                    </mat-radio-group>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Review">
+                                <th mat-header-cell *matHeaderCellDef>Review</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <textarea class="form-field"
+                                        (keydown.enter)="sendCodeReviewType(element.id, $event)"
+                                        [value]="element.reviewer ? element.reviewer :null "></textarea>
+                                </td>
+                            </ng-container>
+
+
+                            <tr mat-header-row *matHeaderRowDef="tableColumn"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tableColumn;" [id]="row.id"></tr>
+                        </table>
+                    </div>
+                    }
+
+                    @if (ICDCodes && ICDCodes.length) {
+                    <div class="tableWrapper my-3 p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h5>ICD Codes</h5>
+                            <button class="btn rounded-btn d-flex align-items-center my-2"
+                                (click)="addNewCodes('icd')"><mat-icon>add</mat-icon> Add ICD Codes</button>
+                        </div>
+                        <table mat-table [dataSource]="ICDCodes" matSort>
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="Sr no">
+                                <th mat-header-cell *matHeaderCellDef> Sr no </th>
+                                <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="Code">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="patient_name"> Code </th>
+                                <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="Description">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="patient_id"> Citation </th>
+                                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Action">
+                                <th mat-header-cell *matHeaderCellDef>Action</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-radio-group aria-label="Select an option" color="primary"
+                                        (change)="sendCodeReview(element.id,$event)"
+                                        [value]="element.status ? element.status : null">
+                                        <mat-radio-button value="1">Ok</mat-radio-button>
+                                        <mat-radio-button value="2">Not Ok</mat-radio-button>
+                                        <mat-radio-button value="2">Not Sure</mat-radio-button>
+                                    </mat-radio-group>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Review">
+                                <th mat-header-cell *matHeaderCellDef>Review</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <textarea class="form-field"
+                                        (keydown.enter)="sendCodeReviewType(element.id, $event)"
+                                        [value]="element.reviewer ? element.reviewer :null "></textarea>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="tableColumn"></tr>
+                            <tr mat-row *matRowDef="let row; columns: tableColumn;" [id]="row.id"></tr>
+                        </table>
+                    </div>
+                    }
+                </div>
+                <!-- @if(accessibleFeature && accessibleFeature['Codes'] === 1){
+
+                } -->
+
+            </form>
+        </div>
+    </div>
+</div>
+<ng-template #citationsModal>
+    <h2 mat-dialog-title>Citations</h2>
+    <mat-dialog-content>
+        @if(citation.length){
+        <ul>
+            @for (item of citation; track $index) {
+            <li>
+                <p>{{item.start}}</p>
+                <p>{{item.text}}</p>
+            </li>
+            }
+        </ul>
+        }
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close color="primary">Close</button>
+    </mat-dialog-actions>
+</ng-template>

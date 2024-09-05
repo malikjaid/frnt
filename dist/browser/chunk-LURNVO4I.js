@@ -1,0 +1,1 @@
+var i=function(r){return r.superAdmin="Super Admin",r.doctor="Doctor",r.admin="Admin",r.organisation="Organization",r}(i||{}),p=function(r){return r[r.superAdmin=0]="superAdmin",r[r.Organisation=1]="Organisation",r[r.Doctor=2]="Doctor",r}(p||{});export{i as a,p as b};

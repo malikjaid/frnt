@@ -1,0 +1,60 @@
+<div class="features-fluid">
+    <button class="closemodel btn" [mat-dialog-close]="true" (click)="closeModel(false)">
+        <mat-icon>close</mat-icon>
+    </button>
+    <div class="features-list">
+        <form class="feature-form">
+            <mat-label class="control-label">Features and Flags</mat-label>
+            @if (featuresListing.length) {
+            @for (feature of featuresListing; track $index) {
+            <div class="listing">
+                <div class="feature">
+                    <span class="name">{{feature.name}} </span>
+                    <mat-icon class="ms-2" [matTooltip]="feature.description"
+                        matTooltipPosition="above">info_outline</mat-icon>
+                </div>
+                <mat-slide-toggle [checked]="feature?.checked" [name]="feature?.name" color="primary"
+                    (change)="getSlideValue($event, feature)"></mat-slide-toggle>
+            </div>
+            <div class="flag-data">
+                <form>
+                    <mat-form-field class="example-chip-list" appearance="outline">
+                        <mat-chip-grid #chipGrid aria-label="Doctor selection">
+                            @for (doctor of feature.selectedDoctor; track $index) {
+                            <mat-chip-row (removed)="remove(doctor, feature)">
+                                <span [matTooltip]="doctor?.email"
+                                    matTooltipPosition="above">{{doctor?.full_name}}</span>
+                                <button matChipRemove
+                                    [attr.aria-label]="'remove ' + doctor?.full_name"><mat-icon>cancel</mat-icon></button>
+                            </mat-chip-row>
+                            }
+                        </mat-chip-grid>
+                        <input placeholder="Search doctor..." (input)="searchDoctors($event)"
+                            [matChipInputFor]="chipGrid" [matAutocomplete]="auto" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event, feature)">
+                            @for (alldr of allDoctors; track alldr?.id) {
+                            <!-- <mat-option>
+                                <mat-checkbox [checked]="isAllSelected" (change)="toggleSelectAll()"
+                                    (click)="$event.stopPropagation()">
+                                    Select All
+                                </mat-checkbox>
+                            </mat-option> -->
+                            <mat-option [value]="alldr">
+                                <mat-checkbox color="primary" [checked]="false">
+                                    <span>{{alldr?.email}}</span></mat-checkbox>
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </form>
+            </div>
+            }
+            }@else{
+            <p class="text-center">Features not found!</p>
+            }
+        </form>
+    </div>
+    <div class="action my-3 d-flex justify-content-end">
+        <button class="submit-btn1 btn" (click)="saveFeatures()"><mat-icon>save</mat-icon>Save</button>
+    </div>
+</div>

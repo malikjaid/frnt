@@ -1,0 +1,80 @@
+<div class="organisationListWrapper mt-4">
+  <div class="tableWrapper1">
+    <div class="header d-flex align-items-center justify-content-between mx-3">
+      <div class="title">
+        <h4>Organisation's Listing</h4>
+      </div>
+      <div class="action d-flex align-items-center justify-content-between my-3">
+        <div class="filterToolbar">
+          <form [formGroup]="searchForm">
+            <input class="input-grey-rounded" type="search" placeholder="Search" formControlName="search">
+          </form>
+        </div>
+        <button class="submit-btn1 btn d-flex align-items-center justify-content-center" style="width: auto;"
+          (click)="createOrganisation()"><mat-icon class="me-2">add</mat-icon> Create Organisation</button>
+      </div>
+    </div>
+    <div class="tableWrapper m-3">
+      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortFunction($event)">
+        <ng-container matColumnDef="Sr no">
+          <th mat-header-cell *matHeaderCellDef> Sr no </th>
+          <td mat-cell *matCellDef="let element; let i = index;"> {{getIndex(i)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Organization Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="full_name"> Organization Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="email"> Email</th>
+          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Country">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
+          <td mat-cell *matCellDef="let element"> {{element.country}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Created Date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Created Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.createdDate | date : 'd-MMMM-y'}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Edit">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
+          <td mat-cell *matCellDef="let element">
+            <button class="btn" (click)="showEditOrganisationModal(element.id)"
+              matTooltip="update organisation details">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="View">
+          <th mat-header-cell *matHeaderCellDef>View</th>
+          <td mat-cell *matCellDef="let element">
+            <a [routerLink]="'/home/doctor/doctor-list/'+ element.id" class="btn" matTooltip="view doctor list">
+              <mat-icon>visibility</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-slide-toggle class="example-margin" #togChecked (change)="getSlideValue($event, element)"
+              [color]="'primary'" [matTooltip]="togChecked?.checked?'Disable':'Enable'" [checked]="element?.state_id===1?true:false">
+            </mat-slide-toggle>
+          </td>
+        </ng-container> -->
+        <ng-container>
+          <tr class="mat-row text-center" *matNoDataRow style="height: 60px;">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length"> No Data Available.</td>
+          </tr>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [id]="row.id"></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons="true" [pageSize]="pagination.per_page"
+        [length]="totalCount" showFirstLastButtons="true" (page)="handlePagination($event)"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+  </div>
+</div>

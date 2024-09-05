@@ -1,0 +1,93 @@
+.confirm-alt {
+    padding: 16px 24px;
+    position: relative;
+
+    .close {
+        position: absolute;
+        border-radius: 2px;
+        transition: all ease 0.5s;
+        top: 6px;
+        right: 6px;
+
+        &:hover {
+            color: rgb(255 0 0 / 80%);
+            background-color: rgba(255, 0, 0, 0.349);
+            cursor: pointer;
+        }
+    }
+
+    .info {
+        text-align: center;
+
+        span {
+            display: inline-block;
+            background: #ff000021;
+            padding: 7px 7px 1px 8px;
+            border-radius: 50%;
+
+            mat-icon {
+                font-size: 36px;
+                width: 36px;
+                height: 36px;
+                color: #f44336eb;
+            }
+        }
+
+    }
+
+    .message {
+        margin: 20px 0px;
+        text-align: center;
+
+        h2 {
+            font-size: 16px;
+        }
+    }
+
+    .action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        button {
+            display: flex;
+            align-items: center;
+            padding: 4px 8px;
+            border: 1px solid;
+            border-radius: 4px;
+            font-size: 14px;
+
+            mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+                margin-right: 6px;
+            }
+        }
+
+        .calcel {
+            transition: all ease 0.5s;
+            background-color: #fff;
+            color: grey;
+            border-color: grey;
+
+            &:hover {
+                background-color: grey;
+                color: #fff;
+            }
+        }
+
+        .delete {
+            transition: all ease 0.5s;
+            background-color: #fff;
+            color: red;
+            border-color: red;
+
+            &:hover {
+                background-color: red;
+                color: #fff;
+            }
+
+        }
+    }
+}

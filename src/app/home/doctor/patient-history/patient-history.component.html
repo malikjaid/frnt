@@ -1,0 +1,114 @@
+<div class="patientHistoryWrapper">
+  <div class="">
+    <div class="header d-flex align-items-center justify-content-between mx-3">
+      <div class="title">
+        <h4>Patient's History Listing</h4>
+      </div>
+      <div class="action d-flex align-items-center justify-content-between my-3">
+        <div class="filterToolbar">
+          <form [formGroup]="searchForm">
+            <input class="input-grey-rounded" type="search" placeholder="Search" formControlName="search">
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="tableWrapper m-3">
+      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortFunction($event)">
+        <ng-container matColumnDef="Sr no">
+          <th mat-header-cell *matHeaderCellDef> Sr no </th>
+          <td mat-cell *matCellDef="let element; let i = index"> {{getIndex(i)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Patient Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="patient_name"> Patient Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.PatientName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Patient Id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="patient_id"> Patient Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.PatientId}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Audio">
+          <th mat-header-cell *matHeaderCellDef> Audio </th>
+          <td mat-cell *matCellDef="let element; let i =index">
+            <audio controls #audioControl (play)="onPlay(i)">
+              <source [src]="element.audioFileURL" type="audio/mp3">
+            </audio>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Prompt Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="prompt">Template</th>
+          <td mat-cell *matCellDef="let element">
+            {{element?.prompt}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Patient Type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="type_id"> Patient Type </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.typeId === 1 ? 'IPD': element.typeId ? 'OPD' : 'none'}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="progress_status">Status</th>
+          <td mat-cell *matCellDef="let element">
+            @if(element.progressStatus){
+              <span class="completionTag" [ngStyle]="{'background-color':element.progressStatus !== '4' ? '#8d79f4':'#339133'}">{{completedStatus[element.progressStatus]}}</span>
+            }
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Created Date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at"> Created Date </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.createdDate | date : 'd-MMMM-y'}}
+          </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="Transcript">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="transcript"> Transcript </th>
+          <td mat-cell *matCellDef="let element">
+            <button class="d-flex align-items-center btn" color="primary" matTooltip="View Transcript"
+              matTooltipPosition="above" (click)="showModal(element.transcript, 'Transcript')">
+              <mat-icon class="me-2">subject</mat-icon>
+            </button>
+          </td>
+        </ng-container> -->
+        <!-- <ng-container matColumnDef="Summary">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="summary"> Summary </th>
+          <td mat-cell *matCellDef="let element">
+            <button class="d-flex align-items-center btn" color="primary"
+              (click)="showModal(element.summary, 'Summary')" matTooltip="View Summary" matTooltipPosition="above">
+              <mat-icon class="me-2">description</mat-icon>
+            </button>
+          </td>
+        </ng-container> -->
+        <ng-container matColumnDef="Report">
+          <th mat-header-cell *matHeaderCellDef>Report</th>
+          <td mat-cell *matCellDef="let element">
+            <a class="btn" matTooltip="download pdf"
+              [href]="element.reportUrl">
+              <mat-icon>download</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="View Details">
+          <th mat-header-cell *matHeaderCellDef>View Details</th>
+          <td mat-cell *matCellDef="let element">
+            <a [routerLink]="'/home/patient/patient-details/'+ element.id">
+
+              <mat-icon>visibility</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container>
+          <tr class="mat-row text-center" *matNoDataRow style="height: 60px;">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length"> No Data Available.</td>
+          </tr>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [id]="row.id"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons="true" [pageSize]="pagination.per_page"
+        [length]="totalCount" (page)="handlePagination($event)" aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

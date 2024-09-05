@@ -1,0 +1,63 @@
+<div class="header-wrapper">
+    <div class="brand-logo">
+        <a
+            [routerLink]="authService.loginRole === 'Admin' ? '/home/organisation/dashboard' : authService.loginRole === 'Organization' ? '/home/doctor/dashboard':'/home/patient/dashboard'">
+            <img src="../../../assets/HealtOrbitlogo.svg" alt="logo" />
+        </a>
+    </div>
+
+    <div class="menuWrapper d-flex">
+        @if(authService.loginRole === 'Doctor'){
+        <ul class="navlist" [ngClass]="isShowMobileMenu ? 'show' :''">
+            @for (link of doctorLink; track $index) {
+            <li class="navlistItem">
+                <a [routerLink]="link.link" routerLinkActive='active' class="navLink"
+                    (click)="gotoRoute(link)">{{link.label}}</a>
+            </li>
+            }
+            <li class="navlistItem">
+                <button class="btn close-btn" (click)="hideMobileMenu()">X</button>
+            </li>
+        </ul>
+        }@else if(authService.loginRole === 'Admin'){
+        <ul class="navlist" [ngClass]="{'show': isShowMobileMenu}">
+            @for (link of superAdminLink; track $index) {
+            <li class="navlistItem">
+                <a [routerLink]="link.link" routerLinkActive="active" class="navLink">{{link.label}}</a>
+            </li>
+            }
+            <li class="navlistItem">
+                <button class="btn close-btn" (click)="hideMobileMenu()">X</button>
+            </li>
+        </ul>
+        }@else{
+        <ul class="navlist" [ngClass]="{'show': isShowMobileMenu}">
+            @for (link of organisationLink; track $index) {
+            <li class="navlistItem">
+                <a [routerLink]="link.link" routerLinkActive="active" class="navLink">{{link.label}}</a>
+            </li>
+            }
+            <li class="navlistItem">
+                <button class="btn close-btn" (click)="hideMobileMenu()">X</button>
+            </li>
+        </ul>
+        }
+        <div class="cta-wrapper d-flex align-items-center ">
+            <button class="mobileBtn" (click)="showMobileMenu()">
+                <img src="../../../assets/hamburger.svg" alt="mobile btn" class="iconbtn img-fluid" width="40"
+                    height="40" />
+            </button>
+            <button mat-button [matMenuTriggerFor]="menuUser">
+                <mat-icon [matMenuTriggerFor]="menuUser"
+                    style="font-size: 30px;width: 30px;height: 30px;">account_circle</mat-icon>
+            </button>
+            <mat-menu #menuUser="matMenu">
+                <button mat-menu-item (click)="UserSetting()"><mat-icon class="me-2">manage_accounts</mat-icon>
+                    {{authService.loginRole}}</button>
+                <button mat-menu-item (click)="logout()"><mat-icon class="me-2">logout</mat-icon> Logout</button>
+            </mat-menu>
+        </div>
+    </div>
+
+
+</div>

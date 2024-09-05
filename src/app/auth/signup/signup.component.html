@@ -1,0 +1,301 @@
+<div class="signupFormWrapper">
+    <div class="signupForm" [ngStyle]="{'max-width': currentRoute==='register-organization'?'60vw':currentRoute==='register-doctor'?'50vw':'480px'}">
+         <div>
+            @if(currentRoute!=='register'){
+                <a routerLink="/register"><mat-icon class="goBack" matTooltip="Go back" matTooltipPosition="above">arrow_back</mat-icon></a>
+            }
+         </div>
+        <h1 class="title">
+            Welcome to
+            <img src="../../../assets/HealtOrbitlogo.svg" class="formLogo" />
+        </h1>
+
+        @if(currentRoute==='register'){
+        <p class="subText">Sign Up</p>
+        <div class="option">
+            <div class="doctororganization">
+                <a routerLink="/register-doctor">
+                    <mat-icon>medication</mat-icon>
+                    <span>Doctor</span>
+                </a>
+                <a routerLink="/register-organization">
+                    <mat-icon>corporate_fare</mat-icon>
+                    <span>Organization</span>
+                </a>
+            </div>
+        </div>
+        }
+
+        @if(currentRoute==='register-organization'){
+        <div class="org-form">
+            <form [formGroup]="createOrgainsationForm">
+                <div class="patientCard">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 my-2">
+                            <div class="form-group">
+                                <mat-label class="control-label">Organisation Name</mat-label>
+                                <mat-form-field appearance="outline" class="form-field small">
+                                    <input matInput placeholder="Organisation name" formControlName="full_name"
+                                        autocomplete="off" />
+                                </mat-form-field>
+                                @if(createOrgainsationForm.get('full_name')?.hasError('required') &&
+                                createOrgainsationForm.get('full_name')?.touched){
+                                <mat-error class="error-msg">Organisation Name is required</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 my-2">
+                            <div class="form-group">
+                                <mat-label class="control-label">Email</mat-label>
+                                <mat-form-field appearance="outline" class="form-field small">
+                                    <input matInput type="email" placeholder="Email" formControlName="email"
+                                        autocomplete="off" />
+                                </mat-form-field>
+                                @if(createOrgainsationForm.get('email')?.hasError('required') &&
+                                createOrgainsationForm.get('email')?.touched){
+                                <mat-error class="error-msg">Email is required</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('email')?.hasError('email') &&
+                                createOrgainsationForm.get('email')?.touched){
+                                <mat-error class="error-msg">Invalid Email</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 my-2">
+                            <div class="form-group">
+                                <mat-label class="control-label">Password</mat-label>
+                                <mat-form-field appearance="outline" class="form-field small">
+                                    <input matInput type="password" placeholder="Password" formControlName="password"
+                                        autocomplete="off" [type]="!isPasswordVisible ? 'password' : 'text'" />
+                                    <mat-icon matSuffix
+                                        (click)="isPasswordVisible = !isPasswordVisible">{{isPasswordVisible?
+                                        'visibility':'visibility_off'}} </mat-icon>
+                                </mat-form-field>
+                                @if(createOrgainsationForm.get('password')?.hasError('required') &&
+                                createOrgainsationForm.get('password')?.touched){
+                                <mat-error class="error-msg">Confirm Password is required</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('password')?.hasError('upp') ||
+                                createOrgainsationForm.get('password')?.hasError('lowe') ||
+                                createOrgainsationForm.get('password')?.hasError('numb') ||
+                                createOrgainsationForm.get('password')?.hasError('speci') &&
+                                createOrgainsationForm.get('password')?.touched){
+                                <mat-error class="error-msg">Your password is weak</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('password')?.hasError('minlength')){
+                                <mat-error class="error-msg">Password should be greater than 12 characters!</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('password')?.hasError('maxlength')){
+                                <mat-error class="error-msg">Password can not exceed 20 characters</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('password')?.hasError('space') &&
+                                createOrgainsationForm.get('password')?.touched){
+                                <mat-error class="error-msg">Space not allowed</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 my-2">
+                            <div class="form-group">
+                                <mat-label class="control-label">Confirm Password</mat-label>
+                                <mat-form-field appearance="outline" class="form-field small">
+                                    <input matInput type="password" placeholder="Confirm password"
+                                        formControlName="cPassword" autocomplete="off"
+                                        [type]="!isConfirmPasswordVisible ? 'password' : 'text'" />
+                                    <mat-icon matSuffix
+                                        (click)="isConfirmPasswordVisible = !isConfirmPasswordVisible">{{isConfirmPasswordVisible?
+                                        'visibility':'visibility_off'}} </mat-icon>
+                                </mat-form-field>
+                                @if(createOrgainsationForm.get('cPassword')?.hasError('required') &&
+                                createOrgainsationForm.get('cPassword')?.touched){
+                                <mat-error class="error-msg">Confirm Password is required</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('cPassword')?.hasError('upp') ||
+                                createOrgainsationForm.get('cPassword')?.hasError('lowe') ||
+                                createOrgainsationForm.get('cPassword')?.hasError('numb') ||
+                                createOrgainsationForm.get('cPassword')?.hasError('speci') &&
+                                createOrgainsationForm.get('cPassword')?.touched){
+                                <mat-error class="error-msg">Your password is weak</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('cPassword')?.hasError('mustMatch') &&
+                                createOrgainsationForm.get('cPassword')?.touched){
+                                <mat-error class="error-msg">Password & Confirm Password must be same!</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 my-2">
+                            <div class="form-group">
+                                <mat-label class="control-label">Country</mat-label>
+                                <mat-form-field appearance="outline" class="form-field small">
+                                    <mat-select formControlName="country" placeholder="Select country">
+                                        @for (country of countryList; track $index) {
+                                        <mat-option [value]="country?.name">{{country?.name}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                                @if(createOrgainsationForm.get('country')?.hasError('required') &&
+                                createOrgainsationForm.get('country')?.touched){
+                                <mat-error class="error-msg">Country is required</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 my-2">
+                            <div class="form-group">
+                                <mat-label class="control-label">Phone Number</mat-label>
+                                <mat-form-field appearance="outline" class="form-field small">
+                                    <input matInput placeholder="Phone number" formControlName="contact_no"
+                                        autocomplete="off" />
+                                </mat-form-field>
+                                @if(createOrgainsationForm.get('contact_no')?.hasError('required') &&
+                                createOrgainsationForm.get('contact_no')?.touched){
+                                <mat-error class="error-msg">Phone Number is required</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('contact_no')?.hasError('notNum') &&
+                                createOrgainsationForm.get('contact_no')?.touched){
+                                <mat-error class="error-msg">Only Numbers allowed</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('contact_no')?.hasError('minlength') &&
+                                createOrgainsationForm.get('contact_no')?.touched){
+                                <mat-error class="error-msg">Minimum length should be 10 digits</mat-error>
+                                }
+                                @if(createOrgainsationForm.get('contact_no')?.hasError('maxlength') &&
+                                createOrgainsationForm.get('contact_no')?.touched){
+                                <mat-error class="error-msg">Maximum length should be 10 digits</mat-error>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 my-2">
+                            <mat-label class="control-label">Address</mat-label>
+                            <mat-form-field appearance="outline" class="form-field small">
+                                <textarea matInput placeholder=" Address" formControlName="address" rows="2"></textarea>
+                            </mat-form-field>
+                            @if(createOrgainsationForm.get('address')?.hasError('required') &&
+                            createOrgainsationForm.get('address')?.touched){
+                            <mat-error class="error-msg">Address is required</mat-error>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <button class="submit-btn btn w-100 mt-4" style="padding: 12px;" (click)="createOrg()">Register</button>
+        }
+
+        @if(currentRoute==='register-doctor'){
+        <div class="doctor-form">
+            <form [formGroup]="createDoctorForm">
+                <div class="patientCard row">
+                    <div class="form-group my-3 col-6">
+                        <mat-label class="control-label">Doctor Name</mat-label>
+                        <mat-form-field appearance="outline" class="form-field small">
+                            <input matInput placeholder="Doctor name" formControlName="full_name" />
+                        </mat-form-field>
+                        @if(createDoctorForm.get('full_name')?.hasError('required') &&
+                        createDoctorForm.get('full_name')?.touched){
+                        <mat-error class="error-msg">Doctor Name is required</mat-error>
+                        }
+                    </div>
+                    <div class="form-group my-3 col-6">
+                        <mat-label class="control-label">Email</mat-label>
+                        <mat-form-field appearance="outline" class="form-field small">
+                            <input matInput type="email" placeholder="Email" formControlName="email" />
+                        </mat-form-field>
+                        @if(createDoctorForm.get('email')?.hasError('required') &&
+                        createDoctorForm.get('email')?.touched){
+                        <mat-error class="error-msg">Email is required</mat-error>
+                        }
+                        @if(createDoctorForm.get('email')?.hasError('email') &&
+                        createDoctorForm.get('email')?.touched){
+                        <mat-error class="error-msg">Invalid Email</mat-error>
+                        }
+
+                    </div>
+                    <div class="form-group my-3 col-6">
+                        <mat-label class="control-label">Password</mat-label>
+                        <mat-form-field appearance="outline" class="form-field small">
+                            <input matInput placeholder="Password" formControlName="password"
+                                [type]="!isPasswordVisible ? 'password' : 'text'" />
+                            <mat-icon matSuffix (click)="isPasswordVisible = !isPasswordVisible">{{isPasswordVisible?
+                                'visibility':'visibility_off'}} </mat-icon>
+                        </mat-form-field>
+                        @if(createDoctorForm.get('password')?.hasError('required') &&
+                        createDoctorForm.get('password')?.touched){
+                        <mat-error class="error-msg">Password is required</mat-error>
+                        }
+                        @if(createDoctorForm.get('password')?.hasError('upp') ||
+                        createDoctorForm.get('password')?.hasError('lowe') ||
+                        createDoctorForm.get('password')?.hasError('numb') ||
+                        createDoctorForm.get('password')?.hasError('speci') &&
+                        createDoctorForm.get('password')?.touched){
+                        <mat-error class="error-msg">Your password is weak</mat-error>
+                        }
+                        @if(createDoctorForm.get('password')?.hasError('minlength')){
+                        <mat-error class="error-msg">Password should be greater than 12 characters!</mat-error>
+                        }
+                        @if(createDoctorForm.get('password')?.hasError('maxlength')){
+                        <mat-error class="error-msg">Password can not exceed 20 characters</mat-error>
+                        }
+                        @if(createDoctorForm.get('password')?.hasError('space') &&
+                        createDoctorForm.get('password')?.touched){
+                        <mat-error class="error-msg">Space not allowed</mat-error>
+                        }
+                    </div>
+                    <div class="form-group my-3 col-6">
+                        <mat-label class="control-label">Confirm Password</mat-label>
+                        <mat-form-field appearance="outline" class="form-field small">
+                            <input matInput placeholder="Confirm password" formControlName="cPassword"
+                                [type]="!isConfirmPasswordVisible ? 'password' : 'text'" />
+                            <mat-icon matSuffix
+                                (click)="isConfirmPasswordVisible = !isConfirmPasswordVisible">{{isConfirmPasswordVisible?
+                                'visibility':'visibility_off'}} </mat-icon>
+                        </mat-form-field>
+                        @if(createDoctorForm.get('cPassword')?.hasError('required') &&
+                        createDoctorForm.get('cPassword')?.touched){
+                        <mat-error class="error-msg">Confirm Password is required</mat-error>
+                        }
+                        @if(createDoctorForm.get('cPassword')?.hasError('mustMatch') &&
+                        createDoctorForm.get('cPassword')?.touched){
+                        <mat-error class="error-msg">Password & Confirm Password must be same!</mat-error>
+                        }
+                    </div>
+                    <div class="form-group my-3 col-6">
+                        <div class="form-group">
+                            <mat-label class="control-label">Country</mat-label>
+                            <mat-form-field appearance="outline" class="form-field small">
+                                <mat-select formControlName="country" placeholder="Select country">
+                                    @for (country of countryList; track $index) {
+                                    <mat-option [value]="country?.name">{{country?.name}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                            @if(createDoctorForm.get('country')?.hasError('required') &&
+                            createDoctorForm.get('country')?.touched){
+                            <mat-error class="error-msg">Country is required</mat-error>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group my-3 col-6">
+                        <mat-label class="control-label">Specialization</mat-label>
+                        <mat-form-field appearance="outline" class="form-field small">
+                            <mat-select formControlName="specialization" placeholder="Select specialization"
+                                multiple="true">
+                                <input matInput placeholder="Search">
+                                @for (item of specializationData; track $index) {
+                                <mat-option [value]="item.id">{{item.name | titlecase}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        @if(createDoctorForm.get('specialization')?.hasError('required') &&
+                        createDoctorForm.get('specialization')?.touched){
+                        <mat-error class="error-msg">Specialization is required</mat-error>
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+        <button class="submit-btn btn w-100 mt-4" style="padding: 12px;" (click)="createDr()">Register</button>
+        }
+        <div class="mt-3">
+            <p class="mb-0">Already have an account? <a routerLink="/login">Login</a></p>
+        </div>
+    </div>
+</div>

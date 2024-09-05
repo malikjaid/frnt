@@ -1,0 +1,199 @@
+<div class="loginFormWrapper">
+    <div class="loginForm">
+
+        <div>
+            @if(loginOTP){
+            <mat-icon class="goBack" matTooltip="Back to login" matTooltipPosition="above" (click)="loginOTP = !loginOTP; loginForm.get('otp')?.reset()">arrow_back</mat-icon>
+            }
+            <h1 class="title">
+                Welcome to
+                <img src="../../../assets/HealtOrbitlogo.svg" class="formLogo" />
+            </h1>
+        </div>
+        @if(currentRoute==='login'){
+        <p class="subText">Sign in</p>
+        <form [formGroup]="loginForm">
+            @if(!loginOTP){
+            <div class="form-group my-3">
+                <mat-label class="control-label">Enter Email ID</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                    <input matInput placeholder="Enter email" class="input-control" formControlName="email">
+                </mat-form-field>
+                @if(loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched){
+                <mat-error class="error-msg mt-2">Email is required</mat-error>
+                }
+                @if(loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched){
+                <mat-error class="error-msg mt-2">Invalid Email</mat-error>
+                }
+                @if(loginForm.get('email')?.hasError('space') && loginForm.get('email')?.touched){
+                <mat-error class="error-msg mt-2">Space not allowed</mat-error>
+                }
+            </div>
+            <div class="form-group my-3">
+                <mat-label class="control-label">Enter Password</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                    <input matInput placeholder="Enter password" [type]="!isPasswordVisible ? 'password' : 'text'"
+                        class="input-control" formControlName="password">
+                    <mat-icon matSuffix (click)="isPasswordVisible = !isPasswordVisible">{{isPasswordVisible?
+                        'visibility':'visibility_off'}} </mat-icon>
+                </mat-form-field>
+                @if(loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched){
+                <mat-error class="error-msg mt-2">Password is required</mat-error>
+                }
+            </div>
+            <button mat-flat-button color="primary" type="submit" class="loginBtn my-2" (click)="login()">Sign
+                in</button>
+            }
+            @if(loginOTP){
+            <div class="form-group my-3">
+                <mat-label class="control-label">Enter OTP</mat-label>
+                <div class="otp-container">
+                    @for (item of otpBox; track i; let i = $index;) {
+                    <mat-form-field class="form-field" appearance="outline" class="form-field">
+                        <input matInput type="tel" maxlength="1" class="otp_input_fields" formControlName="otp"
+                            (keydown)="onKeyDown($event, i)" (input)="onInput($event, i)" (paste)="onPaste($event, i)">
+                    </mat-form-field>
+                    }
+                </div>
+                @if(loginForm.get('otp')?.hasError('required') &&
+                loginForm.get('otp')?.touched){
+                <mat-error class="error-msg">OTP is required</mat-error>
+                }
+            </div>
+            <button mat-flat-button color="primary" type="submit" class="loginBtn my-2"
+                (click)="loginValidateOTP()">Validate OTP</button>
+            }
+
+        </form>
+        }
+        @if(currentRoute==='forgot-password'){
+        <p class="subText1">Reset Password</p>
+        <form [formGroup]="forgotPassForm">
+            <div class="form-group row">
+                @if(sentOtp || validateForgPass){
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <mat-label class="control-label">Enter Email ID</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput type="email" placeholder="Enter Email" formControlName="email"
+                                autocomplete="off" />
+                            @if(validateForgPass){
+                            <mat-icon matSuffix (click)="editMail()" style="cursor: pointer;">edit</mat-icon>
+                            }
+                        </mat-form-field>
+                        @if(forgotPassForm.get('email')?.hasError('required') &&
+                        forgotPassForm.get('email')?.touched){
+                        <mat-error class="error-msg">Email is required</mat-error>
+                        }
+                        @if(forgotPassForm.get('email')?.hasError('email') &&
+                        forgotPassForm.get('email')?.touched){
+                        <mat-error class="error-msg">Invalid Email</mat-error>
+                        }
+                    </div>
+                </div>
+                @if(validateForgPass){
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <mat-label class="control-label">Enter OTP</mat-label>
+                        <div class="otp-container">
+                            @for (item of otpBox; track i; let i = $index;) {
+                            <mat-form-field class="form-field" appearance="outline" class="form-field">
+                                <input matInput type="tel" maxlength="1" class="otp_input_fields" formControlName="otp"
+                                    (keydown)="onKeyDown($event, i)" (input)="onInput($event, i)"
+                                    (paste)="onPaste($event, i)">
+                            </mat-form-field>
+                            }
+                        </div>
+                        @if(forgotPassForm.get('otp')?.hasError('required') &&
+                        forgotPassForm.get('otp')?.touched){
+                        <mat-error class="error-msg">OTP is required</mat-error>
+                        }
+                    </div>
+                </div>
+                }
+                }
+                @if(ResetOTP){
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 my-2">
+                    <div class="form-group">
+                        <mat-label class="control-label">New password</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput type="password" placeholder="Enter new password"
+                                formControlName="new_password" autocomplete="off"
+                                [type]="!isPasswordVisible ? 'password' : 'text'" />
+                            <mat-icon matSuffix (click)="isPasswordVisible = !isPasswordVisible">{{isPasswordVisible?
+                                'visibility':'visibility_off'}} </mat-icon>
+                        </mat-form-field>
+                        @if(forgotPassForm.get('new_password')?.hasError('required') &&
+                        forgotPassForm.get('new_password')?.touched){
+                        <mat-error class="error-msg">New password is required</mat-error>
+                        }
+                        @if(forgotPassForm.get('new_password')?.hasError('upp') ||
+                        forgotPassForm.get('new_password')?.hasError('lowe') ||
+                        forgotPassForm.get('new_password')?.hasError('numb') ||
+                        forgotPassForm.get('new_password')?.hasError('speci') &&
+                        forgotPassForm.get('new_password')?.touched){
+                        <mat-error class="error-msg">Your new password is weak</mat-error>
+                        }
+                        @if(forgotPassForm.get('new_password')?.hasError('minlength')){
+                        <mat-error class="error-msg">New password should be greater than 12 characters!</mat-error>
+                        }
+                        @if(forgotPassForm.get('new_password')?.hasError('maxlength')){
+                        <mat-error class="error-msg">New password can not exceed 20 characters</mat-error>
+                        }
+                        @if(forgotPassForm.get('new_password')?.hasError('space') &&
+                        forgotPassForm.get('new_password')?.touched){
+                        <mat-error class="error-msg">Space not allowed</mat-error>
+                        }
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 my-2">
+                    <div class="form-group">
+                        <mat-label class="control-label">Confirm new password</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput type="password" placeholder="Re-Enter new password"
+                                formControlName="c_new_assword" autocomplete="off"
+                                [type]="!isConfirmPasswordVisible ? 'password' : 'text'" />
+                            <mat-icon matSuffix
+                                (click)="isConfirmPasswordVisible = !isConfirmPasswordVisible">{{isConfirmPasswordVisible?
+                                'visibility':'visibility_off'}} </mat-icon>
+                        </mat-form-field>
+                        @if(forgotPassForm.get('c_new_assword')?.hasError('required') &&
+                        forgotPassForm.get('c_new_assword')?.touched){
+                        <mat-error class="error-msg">Confirm new password is required</mat-error>
+                        }
+                        @if(forgotPassForm.get('c_new_assword')?.hasError('mustMatch') &&
+                        forgotPassForm.get('c_new_assword')?.touched){
+                        <mat-error class="error-msg">New password & Confirm new password must be same!</mat-error>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+            @if(sentOtp){
+            <button mat-flat-button color="primary" type="submit" class="loginBtn my-2"
+                (click)="sendOtptoForgotpass()">Send
+                OTP</button>
+            }
+            @if(validateForgPass){
+            <button mat-flat-button color="primary" type="submit" class="loginBtn my-2"
+                (click)="validateforgOTP()">Validate OTP</button>
+            }
+            @if(ResetOTP) {
+            <button mat-flat-button color="primary" type="submit" class="loginBtn my-2"
+                (click)="resetPass()">Reset</button>
+            }
+
+        </form>
+        }
+        <div class="mt-3">
+
+            @if(loginOTP || validateForgPass){
+            <p class="mb-0">Did not get OTP? <span class="Resend_it" (click)="resendOtp(loginOTP)">Resend it</span></p>
+            }
+            @if(currentRoute==='login' && !loginOTP && !validateForgPass){
+            <p class="mb-0">Forgot Password? <a routerLink="/forgot-password">Reset it</a></p>
+            }
+            <p class="mb-0">Don't have an account? <a routerLink="/register">Sign up</a></p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+<div class="homeLayout">
+    <div class="header">
+        <app-header></app-header>
+    </div>
+    <div class="container-fluid profile mt-3 d-flex gap-4">
+        <div class="profile-detail box-sadow-ui">
+            <div class="profile-image">
+                <label for="uploader"><mat-icon>border_color</mat-icon></label>
+                <input type='file' (change)="onSelectFile($event)" multiple hidden id="uploader"
+                    accept="image/jpeg, image/png, image/jpg">
+                <img [src]="profileUrls ? profileUrls:userData?.profile_file?userData?.profile_file:'assets/image/profile/profile.jpg'"
+                    alt="profile" />
+            </div>
+            <div class="profile-name text-center">
+                <h4 class="mb-0 mt-2"><strong>{{userData?.full_name}}</strong></h4>
+                <h6 class="mt-2"><strong>{{userData?.email}}</strong></h6>
+            </div>
+        </div>
+        <div class="box-sadow-ui">
+            <div class="d-flex justify-content-between edit-profile"><h4>Basic Information</h4><mat-icon matTooltip="Edit" matTooltipPosition="above">edit</mat-icon></div>
+            <form [formGroup]="BasicInformation">
+                <div class="d-flex align-items-center flex-wrap justify-content-around">
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Name</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="full_name">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Address</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="address">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">City</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="city">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">State</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="state">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Country</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="country">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Zipcode</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="zipcode">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Date of Birth</mat-label>
+                        <mat-form-field appearance="outline" class="form-field date-picker">
+                            <input matInput class="custom-input-height" [matDatepicker]="dobPicker"
+                                formControlName="birth_date">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #dobPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Gender</mat-label>
+                        <div>
+                            <mat-radio-group class="d-flex" formControlName="gender">
+                                <mat-radio-button color="primary" value="male">Male</mat-radio-button>
+                                <mat-radio-button color="primary" value="female">Female</mat-radio-button>
+                                <mat-radio-button color="primary" value="other">Other</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="box-sadow-ui" style="width: 40%;">
+            <div class="d-flex justify-content-between edit-profile"><h4>Account Data</h4><mat-icon matTooltip="Edit">edit</mat-icon></div>
+            <form [formGroup]="AccountData">
+                <div class="d-flex align-items-center flex-wrap justify-content-around">
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Email</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="email">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Phone number</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input matInput placeholder="" class="input-control" formControlName="phone_number">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group my-2 d-flex flex-column">
+                        <mat-label class="control-label">Language</mat-label>
+                        <mat-form-field appearance="outline" class="form-field">
+                            <input type="text" placeholder="" matInput [matAutocomplete]="auto"
+                                formControlName="language">
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                @for (language of userLanguage; track language) {
+                                <mat-option [value]="language">{{language}}</mat-option>
+                                }
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

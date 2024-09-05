@@ -1,0 +1,266 @@
+<div class="patientDetailsWrapper p-3">
+  <div class="container-fluid">
+    <h2>Patient Details</h2>
+
+    @if(dataSource.length){
+    <div class="tableWrapper">
+      <table mat-table [dataSource]="dataSource">
+
+        <!-- Position Column -->
+        <!-- <ng-container matColumnDef="Sr no">
+          <th mat-header-cell *matHeaderCellDef> Sr no </th>
+          <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
+        </ng-container> -->
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="Patient Name">
+          <th mat-header-cell *matHeaderCellDef> Patient Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.patient_name}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="Patient Id">
+          <th mat-header-cell *matHeaderCellDef> Patient Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.patient_id}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+
+
+        <ng-container matColumnDef="Patient Type">
+          <th mat-header-cell *matHeaderCellDef> Patient Type </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.type_id === 1 ? 'IPD': element.type_id ? 'OPD' : 'none'}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Prompt Type">
+          <th mat-header-cell *matHeaderCellDef> Prompt </th>
+          <td mat-cell *matCellDef="let element">
+           {{element.prompt}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Audio">
+          <th mat-header-cell *matHeaderCellDef> Audio </th>
+          <td mat-cell *matCellDef="let element">
+            <audio controls>
+              <source [src]="element.file_url" type="audio/mp3">
+            </audio>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Created Date">
+          <th mat-header-cell *matHeaderCellDef>Created Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.created_at | date : 'd-MMMM-y'}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="tableColumn"></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumn;" [id]="row.id"></tr>
+      </table>
+    </div>
+
+    @if(citations && citations.length){
+
+    <mat-label class="control-label my-3">Citation</mat-label>
+    <div class="citationView">
+      <ul>
+        @for (item of citations; track $index) {
+        <li>
+          <p>{{item.start}}</p>
+          <p>{{item.text}}</p>
+        </li>
+        }
+      </ul>
+    </div>
+    }
+    <div class="otherDetailsWrapper mt-4">
+      @if(progressStatus === "0"){
+        <button class="btn submit-btn1 d-flex align-items-center" (click)="generateTranscript()"> 
+          <mat-icon class="me-3">settings</mat-icon>
+          Generate Transcript</button>
+      }
+      <form [formGroup]="patientDetailsForm">
+        <div class="row">
+          <div class="col-12">
+            <mat-label class="control-label">Transcript</mat-label>
+            <mat-form-field appearance="outline" class="form-field">
+              <textarea matInput formControlName="transcript" [readonly]="true" rows="10"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-12 my-3">
+            <mat-label class="control-label">Optimized Transcript</mat-label>
+            <mat-form-field appearance="outline" class="form-field">
+              <textarea matInput formControlName="optimizedTranscript" [readonly]="true" rows="10"></textarea>
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-6">
+            <mat-label class="control-label">Optimized Transcript</mat-label>
+            <mat-form-field appearance="outline" class="form-field">
+              <textarea matInput formControlName="optimizedTranscript" [readonly]="true" rows="10"></textarea>
+            </mat-form-field>
+          </div> -->
+        </div>
+        <!-- <div class="row my-3">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <mat-label class="control-label">Selected Transcript:</mat-label>
+            <span>&nbsp;{{dataSource[0]?.transcript_type}}</span>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <mat-label class="control-label">Selected Template:</mat-label>
+            <span>&nbsp;{{dataSource[0]?.prompt}}</span>
+          </div>
+        </div> -->
+
+        
+
+        <div class="row my-3">
+          <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between my-3">
+            <mat-label class="control-label">Summary</mat-label>
+            @if(progressStatus === "1" || progressStatus === "2"){
+              <button class="btn submit-btn1 d-flex align-items-center" (click)="generateTranscript()"> 
+                <mat-icon class="me-3">settings</mat-icon>
+                Generate Summary</button>
+            }
+            </div>
+            <mat-form-field appearance="outline" class="form-field">
+              <textarea matInput formControlName="summary" [readonly]="true" rows="10"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="codesWrapper my-3 py-3">
+          @if(progressStatus === "3"){
+            <button class="btn submit-btn1 d-flex align-items-center mb-3" (click)="generateCode()"> 
+              <mat-icon class="me-3">settings</mat-icon>
+              Generate Code</button>
+          }
+          @if(CPTCodes && CPTCodes.length){
+            <div class="tableWrapper p-3 mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h5>CPT Codes</h5>
+              <button class="btn submit-btn1 d-flex align-items-center my-2"
+              (click)="addNewCodes('cpt')"><mat-icon>add</mat-icon> Add CPT Codes</button>
+          </div>
+            <table mat-table [dataSource]="CPTCodes" class="cptCodeTable">
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="Sr no">
+                <th mat-header-cell *matHeaderCellDef> Sr no </th>
+                <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="Code">
+                <th mat-header-cell *matHeaderCellDef> Code </th>
+                <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+              </ng-container>
+
+              <!-- Weight Column -->
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef> Citation </th>
+                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-radio-group aria-label="Select an option" color="primary"
+                    (change)="sendCodeReview(element.id,$event)" [value]="element.status">
+                    <mat-radio-button value="0">Ok</mat-radio-button>
+                    <mat-radio-button value="1">Not Ok</mat-radio-button>
+                    <mat-radio-button value="2">Not Sure</mat-radio-button>
+                  </mat-radio-group>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Review">
+                <th mat-header-cell *matHeaderCellDef>Review</th>
+                <td mat-cell *matCellDef="let element">
+                  <textarea class="form-field" (keydown.enter)="sendCodeReviewType(element.id, $event)"
+                    [value]="element.reviewer ? element.reviewer :null "></textarea>
+                </td>
+              </ng-container>
+
+              <ng-container>
+                <tr class="mat-row text-center" *matNoDataRow style="height: 60px;">
+                  <td class="mat-cell" [attr.colspan]="codeTableColumn.length"> No Data Available.</td>
+                </tr>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="codeTableColumn"></tr>
+              <tr mat-row *matRowDef="let row; columns: codeTableColumn;" [id]="row.id"></tr>
+            </table>
+          </div>
+          }
+
+          @if (ICDCodes && ICDCodes.length) {
+          <div class="tableWrapper p-3">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h5>ICD Codes</h5>
+              <button class="btn submit-btn1 d-flex align-items-center my-2"
+              (click)="addNewCodes('icd')"><mat-icon>add</mat-icon> Add ICD Codes</button>
+          </div>
+            <table mat-table [dataSource]="ICDCodes" class="icdCodeTable">
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="Sr no">
+                <th mat-header-cell *matHeaderCellDef> Sr no </th>
+                <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="Code">
+                <th mat-header-cell *matHeaderCellDef> Code </th>
+                <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+              </ng-container>
+
+              <!-- Weight Column -->
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef> Citation </th>
+                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-radio-group aria-label="Select an option" color="primary"
+                    (change)="sendCodeReview(element.id,$event)" [value]="element.status ? element.status : null">
+                    <mat-radio-button value="0">Ok</mat-radio-button>
+                    <mat-radio-button value="1">Not Ok</mat-radio-button>
+                    <mat-radio-button value="2">Not Sure</mat-radio-button>
+                  </mat-radio-group>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Review">
+                <th mat-header-cell *matHeaderCellDef>Review</th>
+                <td mat-cell *matCellDef="let element">
+                  <textarea class="form-field" (keydown.enter)="sendCodeReviewType(element.id, $event)"
+                    [value]="element.reviewer ? element.reviewer :null "></textarea>
+                </td>
+              </ng-container>
+
+              <ng-container>
+                <tr class="mat-row text-center" *matNoDataRow style="height: 60px;">
+                  <td class="mat-cell" [attr.colspan]="codeTableColumn.length"> No Data Available.</td>
+                </tr>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="codeTableColumn"></tr>
+              <tr mat-row *matRowDef="let row; columns: codeTableColumn;" [id]="row.id"></tr>
+            </table>
+          </div>
+          }
+
+        </div>
+      </form>
+    </div>
+    }@else {
+    <p class="text-center">No Data Available</p>
+    }
+
+  </div>
+</div>

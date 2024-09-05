@@ -1,0 +1,119 @@
+.adminDashboard{
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.detailsCard {
+    background-color: rgb(244 232 255);
+    color: #000;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 12px;
+    margin: 0px 0px 12px 0px;
+
+    &:nth-of-type(1) {
+
+        background-color: rgb(255 244 222);
+    }
+
+    &:nth-of-type(2) {
+
+        background-color: rgb(220 252 231);
+    }
+
+    &:nth-of-type(3) {
+
+        background-color: rgb(255 226 230);
+    }
+}
+
+.chart-list {
+    margin: 24px 0px;
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+
+    .chart {
+        transition: .5s;
+        border: 0;
+        border-radius: .55rem;
+        box-shadow: 0 1px 2px #0000001f;
+        padding: 12px 16px;
+        width: 23%;
+        position: relative;
+
+        @media (max-width: 1300px) {
+            width: 23%;
+        }
+
+        @media (max-width: 900px) {
+            width: 48%;
+        }
+
+        @media (max-width: 680px) {
+            width: 100%;
+        }
+
+        .menu {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            cursor: pointer;
+            background-color: transparent;
+            border-radius: 4px;
+            padding: 0px 2px 0px 2px;
+
+            mat-icon {
+                margin-bottom: -5px;
+            }
+        }
+    }
+
+    .card-box {
+        @extend .chart;
+        // background-color: #00000026;
+    }
+
+    .orgchart {
+        @extend .chart;
+        background-color: rgb(244, 232, 255);
+    }
+
+    .drchart {
+        background-color: rgb(255, 244, 222);
+        @extend .chart;
+    }
+
+    .ptchart {
+        background-color: rgb(220, 252, 231);
+        @extend .chart;
+    }
+
+}
+
+::ng-deep {
+    .mat-mdc-menu-panel {
+        min-width: 160px !important;
+        max-width: 160px !important;
+
+        .mat-mdc-menu-item-text {
+            font-size: 14px !important;
+
+        }
+
+        .mat-mdc-menu-item {
+            min-height: 32px !important;
+        }
+    }
+
+}
+
+.flt_active{
+    background: #170dfdad;
+    color: #fff;
+}
