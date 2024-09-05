@@ -32,7 +32,7 @@ jobs:
 
     - name: Copy build files to EC2
       run: |
-        scp -r -o StrictHostKeyChecking=no ./dist/* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_DEPLOY_PATH }}
+        scp -r -o StrictHostKeyChecking=no ./dist ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_DEPLOY_PATH }}
 
     # - name: SSH into EC2 and run deploy script
     #   run: |
